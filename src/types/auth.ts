@@ -6,6 +6,6 @@ export interface UserLoginDto {
 }
 
 export interface TokenResponseDto {
-  token: string;
-  expiration: string; // or Date if you parse it
+  accessToken: string;
+  refreshToken: string;
 }
