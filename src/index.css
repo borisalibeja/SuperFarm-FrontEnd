@@ -1,0 +1,6 @@
+/* Import Tailwind's base styles */
+@import "tailwindcss/preflight";
+
+/* Import Tailwind's component styles */
+@tailwind utilities;
+@import "tailwindcss";
