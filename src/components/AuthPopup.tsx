@@ -5,10 +5,11 @@ import { UserLoginDto, TokenResponseDto } from "../types/auth";
 
 interface Props {
   onClose: () => void;
+  onSuccess: () => void;
   mode: "login" | "signup";
 }
 
-const AuthPopup: React.FC<Props> = ({ onClose, mode }) => {
+const AuthPopup: React.FC<Props> = ({ onClose, onSuccess, mode }) => {
   const isLogin = mode === "login";
 
   const [username, setUsername] = useState("");
@@ -25,10 +26,11 @@ const AuthPopup: React.FC<Props> = ({ onClose, mode }) => {
       const response = await api.post<TokenResponseDto>("/Auth/login", payload);
       console.log("AccessToken:", response.data.accessToken);
       console.log("RefreshToken:", response.data.refreshToken);
+      console.log("Login successful!");
+      onSuccess();
       // Store the tokens as needed, e.g., in localStorage
       localStorage.setItem("accessToken", response.data.accessToken);
       localStorage.setItem("refreshToken", response.data.refreshToken);
-      onClose();
     } catch (error: unknown) {
       const err = error as AxiosError;
       console.error("Login error:", err.response?.data || err.message);
@@ -49,7 +51,7 @@ const AuthPopup: React.FC<Props> = ({ onClose, mode }) => {
         repeatPassword,
       });
       console.log("Signup success:", response.data);
-      onClose();
+      onSuccess();
     } catch (error: unknown) {
       const err = error as AxiosError;
       console.error("Signup error:", err.response?.data || err.message);
@@ -87,17 +89,17 @@ const AuthPopup: React.FC<Props> = ({ onClose, mode }) => {
       )}
 
       <button
-        className="bg-green-500 text-white px-4 py-2 rounded w-full"
+        className="bg-green-500 text-white px-4 py-2 cursor-pointer rounded w-full"
         onClick={isLogin ? handleLogin : handleRegister}
       >
         {isLogin ? "Log In" : "Register"}
       </button>
 
       <button
-        className="mt-2 text-sm text-gray-500 underline w-full"
         onClick={onClose}
+        className="absolute top-2 right-2 text-gray-500 hover:text-gray-800 cursor-pointer text-sm"
       >
-        Close
+        ✖
       </button>
     </div>
   );
