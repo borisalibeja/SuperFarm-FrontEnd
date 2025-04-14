@@ -60,22 +60,22 @@ const AuthPopup: React.FC<Props> = ({ onClose, onSuccess, mode }) => {
   };
 
   return (
-    <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-white p-6 w-[450px] border rounded shadow-md z-50">
-      <h2 className="text-xl font-bold mb-4">{isLogin ? "Log In" : "Sign Up"}</h2>
+    <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-gray-900 p-6 w-[400px] border rounded-2xl shadow-md z-50">
+      <h2 className="text-xl text-white flex justify-center items-center font-bold mb-4">{isLogin ? "Log In" : "Sign Up"}</h2>
 
       <input
         type="text"
         placeholder="Username"
         value={username}
         onChange={(e) => setUsername(e.target.value)}
-        className="w-full mb-2 p-2 border rounded"
+        className="w-full mb-2 p-2 border text-white rounded-lg"
       />
       <input
         type="password"
         placeholder="Password"
         value={password}
         onChange={(e) => setPassword(e.target.value)}
-        className="w-full mb-4 p-2 border rounded"
+        className="w-full mb-4 p-2 border rounded-lg text-white"
       />
 
       {!isLogin && (
@@ -84,12 +84,12 @@ const AuthPopup: React.FC<Props> = ({ onClose, onSuccess, mode }) => {
           placeholder="Repeat Password"
           value={repeatPassword}
           onChange={(e) => setRepeatPassword(e.target.value)}
-          className="w-full mb-4 p-2 border rounded"
+          className="w-full mb-4 p-2 text-white border rounded-lg"
         />
       )}
 
       <button
-        className="bg-green-500 text-white px-4 py-2 cursor-pointer rounded w-full"
+        className="bg-blue-500 text-white px-4 py-2 cursor-pointer rounded w-full"
         onClick={isLogin ? handleLogin : handleRegister}
       >
         {isLogin ? "Log In" : "Register"}
@@ -97,7 +97,7 @@ const AuthPopup: React.FC<Props> = ({ onClose, onSuccess, mode }) => {
 
       <button
         onClick={onClose}
-        className="absolute top-2 right-2 text-gray-500 hover:text-gray-800 cursor-pointer text-sm"
+        className="absolute top-3 right-3 p-2  rounded-full bg-gray-700 cursor-pointer hover:bg-black  text-m"
       >
         ✖
       </button>

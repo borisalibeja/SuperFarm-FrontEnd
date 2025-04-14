@@ -1,8 +1,11 @@
-import { useState, useEffect } from "react";
+
 import AuthPopup from "../components/AuthPopup";
 import MainLayout from "../layouts/MainLayout";
+import FarmCatalog from "../components/FarmCatalog";
+import { useEffect, useState } from "react";
 
-const Home: React.FC = () => {
+const Farms: React.FC = () => {
+
   const [authMode, setAuthMode] = useState<"login" | "signup" | null>(null);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   
@@ -37,21 +40,19 @@ const Home: React.FC = () => {
 
   return (
     <>
-      <MainLayout
+      <MainLayout 
         isAuthenticated={isAuthenticated}
         onLoginClick={handleLogin}
         onSignupClick={handleSignup}
-        onLogoutClick={handleLogout}
-      >
-        {/* Page-specific content goes here */}
-        <div className="text-center text-lg mt-10">Welcome to Local Farm!</div>
+        onLogoutClick={handleLogout}>
+        {/* Product Catalog */}
+        <FarmCatalog />
       </MainLayout>
-
-      {authMode && (
+        {authMode && (
         <AuthPopup mode={authMode} onClose={() => setAuthMode(null)} onSuccess={handleAuthSuccess}/>
       )}
     </>
   );
 };
 
-export default Home;
+export default Farms;
