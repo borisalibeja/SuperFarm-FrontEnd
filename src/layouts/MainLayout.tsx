@@ -1,32 +1,56 @@
-import React, { ReactNode } from "react";
+import React, { ReactNode, useEffect, useState } from "react";
 import { Link } from "react-router-dom"; // Import Link
 import { FaShoppingCart } from "react-icons/fa";
 import ProfileDropdown from "../components/ProfileDropdown";
+import AuthPopup from "../components/AuthPopup";
 
 interface Props {
   children: ReactNode;
-  onLoginClick: () => void;
-  onSignupClick: () => void;
-  isAuthenticated: boolean;
-  onLogoutClick: () => void;
-  isPopupActive?: boolean;
+
 }
 
-const MainLayout: React.FC<Props> = ({children,
-  isAuthenticated,
-  onLoginClick,
-  onSignupClick,
-  onLogoutClick,
-  isPopupActive = false }) => {
+const MainLayout: React.FC<Props> = ({children }) => {
+  const [authMode, setAuthMode] = useState<"login" | "signup" | null>(null);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+
+  useEffect(() => {
+    const token = localStorage.getItem("accessToken");
+    setIsAuthenticated(!!token); // Set to true if token exists
+  }, []);
+
+  const handleLogin = () => {
+    setAuthMode("login");
+  };
+
+  const handleSignup = () => {
+    setAuthMode("signup");
+  };
+
+  const handleLogout = () => {
+    // Clear the authentication tokens and update state
+    localStorage.removeItem("accessToken");
+    localStorage.removeItem("refreshToken");
+    setIsAuthenticated(false);
+  };
+
+  const handleAuthSuccess = () => {
+    // Called after login or signup is successful
+    setAuthMode(null); // Close the popup
+    setIsAuthenticated(true); // Update the authentication state
+    // Example: Store tokens in localStorage for session management
+    localStorage.setItem("accessToken", "dummyAccessToken");
+    localStorage.setItem("refreshToken", "dummyRefreshToken");
+  };
+
   return (
-    <div className={`flex flex-col flex-wrap min-h-screen ${isPopupActive ? "filter blur-sm" : ""}`}>
+    <div className={`flex flex-col flex-wrap min-h-screen "filter blur-sm" : ""}`}>
       {/* Header */}
       <header className="h-[10vh] bg-black flex-wrap  flex items-center justify-between px-6 shadow  border-b-[0.5px] border-gray-500">
         {/* Left: App Name */}
         <div className="text-xl text-white font-bold">Local Farm</div>
 
         {/* Middle: Search Bar */}
-        <div className="flex-1 flex justify-center pl-22 text-white ">
+        <div className="flex-1 flex justify-center  text-white ">
           <input
             type="text"
             placeholder="Search products..."
@@ -39,23 +63,23 @@ const MainLayout: React.FC<Props> = ({children,
           {isAuthenticated ? (
             <>
               {/* Profile Icon with Dropdown */}
-              <ProfileDropdown onLogoutClick={onLogoutClick} />
+              <ProfileDropdown onLogoutClick={handleLogout} />
 
               {/* Shopping Cart Icon */}
-              <FaShoppingCart size={24} className="cursor-pointer bg-white" />
+              <FaShoppingCart size={42} className="cursor-pointer focus:outline-none bg-gray-400 rounded-full p-2 hover:bg-gray-100 transition duration-200 ease-in-out " />
             </>
           ) : (
             <>
               {/* Log In and Sign Up Buttons */}
               <button
                 className="text-white px-4 py-1 rounded-full cursor-pointer hover:bg-gray-700"
-                onClick={onLoginClick}
+                onClick={handleLogin}
               >
                 Log In
               </button>
               <button
                 className="text-white px-4 py-1 rounded-full cursor-pointer hover:bg-gray-700"
-                onClick={onSignupClick}
+                onClick={handleSignup}
               >
                 Sign Up
               </button>
@@ -85,6 +109,14 @@ const MainLayout: React.FC<Props> = ({children,
         <p>© 2025 Local Farm. All rights reserved.</p>
         <p>Contact: localfarm@example.com</p>
       </footer>
+      {/* Auth Popup */}
+      {authMode && (
+        <AuthPopup
+          mode={authMode}
+          onClose={() => setAuthMode(null)}
+          onSuccess={handleAuthSuccess}
+        />
+      )}
     </div>
   );
 };
