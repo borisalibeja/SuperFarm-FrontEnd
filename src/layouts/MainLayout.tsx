@@ -45,9 +45,9 @@ const MainLayout: React.FC<Props> = ({children }) => {
   return (
     <div className={`flex flex-col flex-wrap min-h-screen "filter blur-sm" : ""}`}>
       {/* Header */}
-      <header className="h-[10vh] bg-black flex-wrap  flex items-center justify-between px-6 shadow  border-b-[0.5px] border-gray-500">
+      <header className=" h-[10vh] bg-black flex-wrap  flex items-center justify-between px-6 shadow  border-b-[0.5px] border-gray-500">
         {/* Left: App Name */}
-        <div className="text-xl text-white font-bold">Local Farm</div>
+        <div className="text-xl text-white curso-pointer font-bold"><Link to={"/products"}>Local Farm</Link></div>
 
         {/* Middle: Search Bar */}
         <div className="flex-1 flex justify-center  text-white ">

@@ -4,7 +4,8 @@ import React from "react";
 import Products from "./pages/Products";
 import Farms from "./pages/Farms";
 import Map from "./pages/Map";
-import Profile from "./layouts/Profile";
+import ProfileLayout from "./layouts/ProfileLayouts";
+import PersonalInfo from "./pages/PersonalInfo";
 
 const App: React.FC = () => {
   return (
@@ -14,7 +15,8 @@ const App: React.FC = () => {
         <Route path="/products" element={<Products />} />
         <Route path="/farms" element={<Farms />} />
         <Route path="/map" element={<Map />} />
-        <Route path="/profile" element={<Profile children={undefined} />}/>
+        <Route path="/profile" element={<ProfileLayout children={undefined} />}/>
+        <Route path="/profile/personal-info" element={<PersonalInfo />} />
 
       </Routes>
     </Router>
