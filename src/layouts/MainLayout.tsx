@@ -1,8 +1,8 @@
 import React, { ReactNode, useEffect, useState } from "react";
 import { Link } from "react-router-dom"; // Import Link
 import { FaShoppingCart } from "react-icons/fa";
-import ProfileDropdown from "../components/ProfileDropdown";
-import AuthPopup from "../components/AuthPopup";
+import ProfileDropdown from "../components/homeComponents/ProfileDropdown";
+import AuthPopup from "../components/homeComponents/AuthPopup";
 
 interface Props {
   children: ReactNode;

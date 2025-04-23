@@ -4,7 +4,7 @@ import ProfileLayout from "../layouts/ProfileLayouts";
 const PersonalInfo: React.FC = () => {
   return (
     <ProfileLayout>
-        <div className="bg-black p-6  flex shadow-md">
+        <div className="bg-black p-6 flex shadow-md">
                     {/* Profile Picture */}
             <div className="flex flex-col items-center p-8 ">
                 <img

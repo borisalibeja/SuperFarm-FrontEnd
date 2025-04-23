@@ -1,8 +1,8 @@
 import React, { ReactNode, useState } from "react";
 import { FaShoppingCart } from "react-icons/fa";
 import { Link} from "react-router-dom";
-import ProfileDropdown from "../components/ProfileDropdown";
-import AuthPopup from "../components/AuthPopup";
+import ProfileDropdown from "../components/homeComponents/ProfileDropdown";
+import AuthPopup from "../components/homeComponents/AuthPopup";
 import { useNavigate } from "react-router-dom";
 
 interface Props {
@@ -50,7 +50,7 @@ const ProfileLayout: React.FC<Props> = ({ children }) => {
           <nav className="w-full bg-black border-b-[0.5px] border-gray-600 text-white">
             <div className="flex text-xl justify-center gap-x-15 py-4 px-10">
               <Link
-                to="/profile/personal-info"
+                to="/profile"
                 className="font-semibold  hover:underline"
               >
                 Personal Info
@@ -66,7 +66,7 @@ const ProfileLayout: React.FC<Props> = ({ children }) => {
               </Link>
             </div>
           </nav>
-          <div className="flex-grow bg-gray-500 w-4/5 mx-auto overflow-y-auto">
+          <div className="flex-grow bg-gray-500 w-4/6 mx-auto overflow-y-auto">
             {children}
           </div>
         </div>

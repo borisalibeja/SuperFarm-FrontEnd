@@ -1,7 +1,7 @@
 import React, { useState } from "react";
-import api from "../api/axios";
+import api from "../../api/axios";
 import { AxiosError } from "axios";
-import { UserLoginDto, TokenResponseDto } from "../types/auth";
+import { UserLoginDto, TokenResponseDto } from "../../types/auth";
 
 interface Props {
   onClose: () => void;

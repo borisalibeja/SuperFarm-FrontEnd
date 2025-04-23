@@ -1,5 +1,5 @@
 import MainLayout from "../layouts/MainLayout";
-import ProductCatalog from "../components/ProductCatalog";
+import ProductCatalog from "../components/homeComponents/ProductCatalog";
 
 const Products: React.FC = () => {
 

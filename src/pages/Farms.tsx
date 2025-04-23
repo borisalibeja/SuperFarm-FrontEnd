@@ -1,6 +1,6 @@
 
 import MainLayout from "../layouts/MainLayout";
-import FarmCatalog from "../components/FarmCatalog";
+import FarmCatalog from "../components/homeComponents/FarmCatalog";
 
 const Farms: React.FC = () => {
 
