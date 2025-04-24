@@ -1,13 +1,10 @@
-import MainLayout from "../layouts/MainLayout";
-import ProductCatalog from "../components/homeComponents/ProductCatalog";
+import MainLayout from "../../layouts/MainLayout";
+import ProductCatalog from "../../components/homeComponents/ProductCatalog";
 
 const Products: React.FC = () => {
-
-
   return (
     <>
       <MainLayout>
-
         {/* Page-specific content goes here */}
         <div className="w-full flex h-[20vh] bg-black  flex-wrap items-center justify-center">
           <div className="flex flex-col p-2 items-center cursor-pointer">
