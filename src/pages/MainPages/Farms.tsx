@@ -1,10 +1,13 @@
 import MainLayout from "../../layouts/MainLayout";
 import FarmCatalog from "../../components/homeComponents/FarmCatalog";
-
-const Farms: React.FC = () => {
+interface FarmProps {
+  searchQuery: string;
+  setSearchQuery: (query: string) => void;
+}
+const Farms: React.FC<FarmProps> = ({ searchQuery, setSearchQuery }) => {
   return (
     <>
-      <MainLayout>
+      <MainLayout searchQuery={searchQuery} setSearchQuery={setSearchQuery}>
         <FarmCatalog />
       </MainLayout>
     </>

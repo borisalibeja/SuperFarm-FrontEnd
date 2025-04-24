@@ -1,35 +1,73 @@
-import React from "react";
+import axios from "axios";
+import React, { useEffect, useState } from "react";
 
 interface Product {
-  id: number;
-  title: string;
-  description: string;
+  productId: string;
+  productName: string;
+  productPrice: number;
+  productCategory: string;
 }
 
-const products: Product[] = Array.from({ length: 30 }, (_, i) => ({
-  id: i + 1,
-  title: `Product ${i + 1}`,
-  description: `This is the description of Product ${i + 1}`,
-}));
+interface ProductCatalogProps {
+  searchQuery: string;
+}
 
-const ProductCatalog: React.FC = () => {
+const ProductCatalog: React.FC<ProductCatalogProps> = ({ searchQuery }) => {
+  const [products, setProducts] = useState<Product[]>([]);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+
+  // Fetch products from the backend
+  useEffect(() => {
+    const fetchProducts = async () => {
+      setIsLoading(true);
+      setErrorMessage(null);
+      try {
+        const url = searchQuery
+          ? `http://localhost:5035/${searchQuery}`
+          : `http://localhost:5035/Product`;
+        const params = searchQuery ? { ProductName: searchQuery } : undefined;
+        const response = await axios.get(url, { params });
+        setProducts(response.data);
+      } catch {
+        setErrorMessage("Failed to fetch products. Please try again.");
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchProducts();
+  }, [searchQuery]);
+
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 p-6">
-      {products.map((product) => (
-        <div
-          key={product.id}
-          className="bg-white shadow-md rounded-lg p-4  flex flex-col justify-between cursor-pointer hover:scale-102 transition-transform duration-300"
-        >
-          <div className="h-32 bg-gray-200 rounded-lg flex items-center justify-center">
-            {/* Placeholder for product image */}
-            <p className="text-gray-500">Product Image</p>
-          </div>
-          <div className="mt-4 text-center">
-            <p className="text-lg font-semibold">{product.title}</p>
-            <p className="text-sm text-gray-500">{product.description}</p>
-          </div>
+    <div className="p-6">
+      {isLoading ? (
+        <p className="text-white text-center">Loading products...</p>
+      ) : errorMessage ? (
+        <p className="text-red-500 text-center">{errorMessage}</p>
+      ) : (
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+          {products.map((product) => (
+            <div
+              key={product.productId}
+              className="bg-gray-700 shadow-md rounded-lg flex flex-col justify-between cursor-pointer hover:scale-102 transition-transform duration-300"
+            >
+              <div className="h-32 bg-gray-500 rounded-t-lg flex items-center justify-center">
+                <p className="text-white">Product Image</p>
+              </div>
+              <div className="mt-4 pb-2 text-center">
+                <p className="text-lg text-white font-semibold">
+                  {product.productName}
+                </p>
+                <p className="text-sm text-white">${product.productPrice}</p>
+                <p className="text-sm text-gray-400">
+                  {product.productCategory}
+                </p>
+              </div>
+            </div>
+          ))}
         </div>
-      ))}
+      )}
     </div>
   );
 };

@@ -1,6 +1,5 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import Home from "./pages/MainPages/Products";
-import React from "react";
+import React, { useState } from "react";
 import Products from "./pages/MainPages/Products";
 import Farms from "./pages/MainPages/Farms";
 import Map from "./pages/MainPages/Map";
@@ -10,13 +9,32 @@ import Addresses from "./pages/ProfilePages/Addresses";
 import Help from "./pages/ProfilePages/Help";
 
 const App: React.FC = () => {
+  const [searchQuery, setSearchQuery] = useState<string>("");
+
   return (
     <Router>
       <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/products" element={<Products />} />
-        <Route path="/farms" element={<Farms />} />
-        <Route path="/map" element={<Map />} />
+        <Route
+          path="/products"
+          element={
+            <Products
+              searchQuery={searchQuery}
+              setSearchQuery={setSearchQuery}
+            />
+          }
+        />
+        <Route
+          path="/farms"
+          element={
+            <Farms searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
+          }
+        />
+        <Route
+          path="/map"
+          element={
+            <Map searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
+          }
+        />
         <Route path="/profile" element={<PersonalInfo />} />
         <Route path="/profile/addresses" element={<Addresses />} />
         <Route path="/profile/help" element={<Help />} />

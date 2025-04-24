@@ -1,15 +1,20 @@
-import React, { ReactNode, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom"; // Import Link
 import { FaShoppingCart } from "react-icons/fa";
 import ProfileDropdown from "../components/homeComponents/ProfileDropdown";
 import AuthPopup from "../components/homeComponents/AuthPopup";
 
-interface Props {
-  children: ReactNode;
-
+interface MainLayoutProps {
+  children: React.ReactNode;
+  searchQuery: string;
+  setSearchQuery: (query: string) => void;
 }
 
-const MainLayout: React.FC<Props> = ({children }) => {
+const MainLayout: React.FC<MainLayoutProps> = ({
+  children,
+  searchQuery,
+  setSearchQuery,
+}) => {
   const [authMode, setAuthMode] = useState<"login" | "signup" | null>(null);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
 
@@ -41,32 +46,41 @@ const MainLayout: React.FC<Props> = ({children }) => {
     localStorage.setItem("accessToken", "dummyAccessToken");
     localStorage.setItem("refreshToken", "dummyRefreshToken");
   };
+  // Fetch products when the component mounts or when the search query changes
 
   return (
-    <div className={`flex flex-col flex-wrap min-h-screen "filter blur-sm" : ""}`}>
+    <div
+      className={`flex flex-col flex-wrap min-h-screen "filter blur-sm" : ""}`}
+    >
       {/* Header */}
-      <header className=" h-[10vh] bg-black flex-wrap  flex items-center justify-between px-6 shadow  border-b-[0.5px] border-gray-500">
+      <header className=" fixed top-0 left-0 w-full h-[10vh] bg-black flex-wrap  flex items-center justify-between px-6 shadow  border-b-[0.5px] border-gray-500 z-50">
         {/* Left: App Name */}
-        <div className="text-xl text-white curso-pointer font-bold"><Link to={"/products"}>Local Farm</Link></div>
-
-        {/* Middle: Search Bar */}
-        <div className="flex-1 flex justify-center  text-white ">
+        <div className="text-xl text-white curso-pointer font-bold">
+          <Link to={"/products"}>Local Farm</Link>
+        </div>
+        {/* Search Bar */}
+        <div className="flex-1 flex justify-center items-center pl-30 text-white ">
           <input
             type="text"
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
             placeholder="Search products..."
             className="w-1/4 p-2 rounded-full bg-gray-700 flex-wrap "
           />
         </div>
 
         {/* Right: Auth/Profile and Cart */}
-        <div className="flex gap-4 flex-wrap items-center">
+        <div className="flex gap-4  items-center min-w-[220px] justify-end">
           {isAuthenticated ? (
             <>
               {/* Profile Icon with Dropdown */}
               <ProfileDropdown onLogoutClick={handleLogout} />
 
               {/* Shopping Cart Icon */}
-              <FaShoppingCart size={42} className="cursor-pointer focus:outline-none bg-gray-400 rounded-full p-2 hover:bg-gray-100 transition duration-200 ease-in-out " />
+              <FaShoppingCart
+                size={42}
+                className="cursor-pointer focus:outline-none bg-gray-400 rounded-full p-2 hover:bg-gray-100 transition duration-200 ease-in-out "
+              />
             </>
           ) : (
             <>
@@ -89,7 +103,7 @@ const MainLayout: React.FC<Props> = ({children }) => {
       </header>
 
       {/* Main Content */}
-      <main className="flex-1 flex-wrap bg-black">
+      <main className="flex-1 flex-wrap pt-[12vh] bg-black">
         <div className="w-full flex h-[10vh] bg-black  flex-wrap items-center justify-center">
           <div className="px-4 py-2 flex bg-black  text-white rounded-full mx-2 cursor-pointer hover:bg-gray-700">
             <Link to="/products">Products </Link>
