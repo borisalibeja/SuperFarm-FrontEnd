@@ -8,7 +8,7 @@ const Farms: React.FC<FarmProps> = ({ searchQuery, setSearchQuery }) => {
   return (
     <>
       <MainLayout searchQuery={searchQuery} setSearchQuery={setSearchQuery}>
-        <FarmCatalog />
+        <FarmCatalog searchQuery={searchQuery} />
       </MainLayout>
     </>
   );

@@ -64,7 +64,7 @@ const MainLayout: React.FC<MainLayoutProps> = ({
             type="text"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            placeholder="Search products..."
+            placeholder="Search ..."
             className="w-1/4 p-2 rounded-full bg-gray-700 flex-wrap "
           />
         </div>

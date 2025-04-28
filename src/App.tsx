@@ -15,6 +15,15 @@ const App: React.FC = () => {
     <Router>
       <Routes>
         <Route
+          path="/"
+          element={
+            <Products
+              searchQuery={searchQuery}
+              setSearchQuery={setSearchQuery}
+            />
+          }
+        />
+        <Route
           path="/products"
           element={
             <Products

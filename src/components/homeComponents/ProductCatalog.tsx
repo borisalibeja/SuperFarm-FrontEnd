@@ -10,9 +10,13 @@ interface Product {
 
 interface ProductCatalogProps {
   searchQuery: string;
+  selectedCategory: string;
 }
 
-const ProductCatalog: React.FC<ProductCatalogProps> = ({ searchQuery }) => {
+const ProductCatalog: React.FC<ProductCatalogProps> = ({
+  searchQuery,
+  selectedCategory,
+}) => {
   const [products, setProducts] = useState<Product[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
@@ -23,10 +27,19 @@ const ProductCatalog: React.FC<ProductCatalogProps> = ({ searchQuery }) => {
       setIsLoading(true);
       setErrorMessage(null);
       try {
-        const url = searchQuery
-          ? `http://localhost:5035/${searchQuery}`
-          : `http://localhost:5035/Product`;
-        const params = searchQuery ? { ProductName: searchQuery } : undefined;
+        const url = `http://localhost:5035/queryProducts`;
+        const params: { [key: string]: string } = {};
+
+        // Add category filter if selected
+        if (selectedCategory && selectedCategory !== "All") {
+          params.ProductCategory = selectedCategory;
+        }
+
+        // Add search query if provided
+        if (searchQuery) {
+          params.ProductName = searchQuery;
+        }
+
         const response = await axios.get(url, { params });
         setProducts(response.data);
       } catch {
@@ -37,7 +50,7 @@ const ProductCatalog: React.FC<ProductCatalogProps> = ({ searchQuery }) => {
     };
 
     fetchProducts();
-  }, [searchQuery]);
+  }, [searchQuery, selectedCategory]);
 
   return (
     <div className="p-6">
