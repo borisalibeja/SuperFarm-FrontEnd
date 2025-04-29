@@ -9,11 +9,16 @@ interface ProductsProps {
 const Products: React.FC<ProductsProps> = ({ searchQuery, setSearchQuery }) => {
   const [selectedCategory, setSelectedCategory] = useState<string>("All");
 
-  const handleCategoryClick = (category: string) => {
-    setSelectedCategory(category);
+  const clearCategoryFilter = () => {
+    setSelectedCategory("All"); // Reset the category filter
+    setSearchQuery(""); // Optionally clear the search query
   };
   return (
-    <MainLayout searchQuery={searchQuery} setSearchQuery={setSearchQuery}>
+    <MainLayout
+      searchQuery={searchQuery}
+      setSearchQuery={setSearchQuery}
+      clearCategoryFilter={clearCategoryFilter}
+    >
       <>
         {/* Page-specific content goes here */}
         <div className="w-full flex h-[20vh] bg-black flex-wrap items-center justify-center">
@@ -29,7 +34,7 @@ const Products: React.FC<ProductsProps> = ({ searchQuery, setSearchQuery }) => {
           ].map((category) => (
             <div
               key={category}
-              onClick={() => handleCategoryClick(category)}
+              onClick={() => setSelectedCategory(category)}
               className={`flex flex-col p-2 items-center cursor-pointer ${
                 selectedCategory === category ? "bg-gray-600" : ""
               }`}

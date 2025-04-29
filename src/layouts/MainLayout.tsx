@@ -8,12 +8,14 @@ interface MainLayoutProps {
   children: React.ReactNode;
   searchQuery: string;
   setSearchQuery: (query: string) => void;
+  clearCategoryFilter: () => void;
 }
 
 const MainLayout: React.FC<MainLayoutProps> = ({
   children,
   searchQuery,
   setSearchQuery,
+  clearCategoryFilter,
 }) => {
   const [authMode, setAuthMode] = useState<"login" | "signup" | null>(null);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -55,7 +57,10 @@ const MainLayout: React.FC<MainLayoutProps> = ({
       {/* Header */}
       <header className=" fixed top-0 left-0 w-full h-[10vh] bg-black flex-wrap  flex items-center justify-between px-6 shadow  border-b-[0.5px] border-gray-500 z-50">
         {/* Left: App Name */}
-        <div className="text-xl text-white curso-pointer font-bold">
+        <div
+          className="text-xl text-white curso-pointer font-bold"
+          onClick={clearCategoryFilter}
+        >
           <Link to={"/products"}>Local Farm</Link>
         </div>
         {/* Search Bar */}
@@ -105,7 +110,10 @@ const MainLayout: React.FC<MainLayoutProps> = ({
       {/* Main Content */}
       <main className="flex-1 flex-wrap pt-[12vh] bg-black">
         <div className="w-full flex h-[10vh] bg-black  flex-wrap items-center justify-center">
-          <div className="px-4 py-2 flex bg-black  text-white rounded-full mx-2 cursor-pointer hover:bg-gray-700">
+          <div
+            className="px-4 py-2 flex bg-black  text-white rounded-full mx-2 cursor-pointer hover:bg-gray-700"
+            onClick={clearCategoryFilter}
+          >
             <Link to="/products">Products </Link>
           </div>
           <div className="px-4 py-2 flex bg-black text-white rounded-full mx-2 cursor-pointer hover:bg-gray-700">
