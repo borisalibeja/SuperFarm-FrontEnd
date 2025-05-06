@@ -6,6 +6,7 @@ import Map from "./pages/MainPages/Map";
 import PersonalInfo from "./pages/ProfilePages/PersonalInfo";
 import Settings from "./pages/ProfilePages/Settings";
 import Addresses from "./pages/ProfilePages/Addresses";
+import ProfileLayout from "./layouts/ProfileLayouts";
 import Help from "./pages/ProfilePages/Help";
 
 const App: React.FC = () => {
@@ -44,10 +45,13 @@ const App: React.FC = () => {
             <Map searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
           }
         />
-        <Route path="/profile" element={<PersonalInfo />} />
-        <Route path="/profile/addresses" element={<Addresses />} />
-        <Route path="/profile/help" element={<Help />} />
-        <Route path="/profile/settings" element={<Settings />} />
+        {/* Profile Pages */}
+        <Route path="/profile" element={<ProfileLayout />}>
+          <Route index element={<PersonalInfo />} />
+          <Route path="addresses" element={<Addresses />} />
+          <Route path="settings" element={<Settings />} />
+          <Route path="help" element={<Help />} />
+        </Route>
       </Routes>
     </Router>
   );

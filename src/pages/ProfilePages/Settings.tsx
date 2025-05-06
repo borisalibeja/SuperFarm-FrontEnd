@@ -1,9 +1,9 @@
 import React, { useState } from "react";
-import ProfileLayout from "../../layouts/ProfileLayouts";
 import EmailPopup from "../../components/settingsComponents/EmailPopup";
 import PhoneNrPopup from "../../components/settingsComponents/PhoneNrPopUp";
 import NamePopUp from "../../components/settingsComponents/NamePopUp";
 import DeletePopup from "../../components/settingsComponents/DeletePopUp";
+import { useUser } from "../../hooks/useUser";
 
 const Settings: React.FC = () => {
   const [isEmailPopupOpen, setIsEmailPopupOpen] = useState(false);
@@ -47,116 +47,120 @@ const Settings: React.FC = () => {
     setFirstName(newFirsName);
     setLastName(newLastName);
   };
+  const { user } = useUser();
+
+  if (!user) {
+    return (
+      <p className="text-white text-center">No user information available.</p>
+    );
+  }
 
   return (
-    <ProfileLayout>
-      <div className="bg-black min-h-screen text-white py-10 px-6">
-        {/* Settings List */}
-        <ul className="space-y-8 items-center">
-          {/* Country Selector */}
-          <li className="flex justify-between items-center border-b border-gray-700 pb-4 ">
-            <div>
-              <p className="font-bold ">Country</p>
-              <p className="text-sm text-gray-400">
-                The selected country determines the currency of your referral
-                code
-              </p>
-            </div>
-            <select className="bg-gray-800 text-white p-2 rounded ">
-              <option>Albania</option>
-              <option>USA</option>
-              <option>Canada</option>
-            </select>
-          </li>
+    <div className="bg-black min-h-screen text-white py-10 px-6">
+      {/* Settings List */}
+      <ul className="space-y-8 items-center">
+        {/* Country Selector */}
+        <li className="flex justify-between items-center border-b border-gray-700 pb-4 ">
+          <div>
+            <p className="font-bold ">Country</p>
+            <p className="text-sm text-gray-400">
+              The selected country determines the currency of your referral code
+            </p>
+          </div>
+          <select className="bg-gray-800 text-white p-2 rounded ">
+            <option>Albania</option>
+            <option>USA</option>
+            <option>Canada</option>
+          </select>
+        </li>
 
-          {/* Email */}
-          <li className="flex justify-between items-center border-b border-gray-700 pb-4">
-            <p className="font-bold">Email</p>
-            <button
-              className="text-blue-400 cursor-pointer"
-              onClick={toggleEmailPopup}
-            >
-              borissalibeja@gmail.com
-            </button>
-          </li>
+        {/* Email */}
+        <li className="flex justify-between items-center border-b border-gray-700 pb-4">
+          <p className="font-bold">Email</p>
+          <button
+            className="text-blue-400 cursor-pointer"
+            onClick={toggleEmailPopup}
+          >
+            {user?.email}
+          </button>
+        </li>
 
-          {/* Mobile Number */}
-          <li className="flex justify-between items-center border-b border-gray-700 pb-4">
-            <p className="font-bold">Mobile number</p>
-            <button
-              className="text-blue-400 cursor-pointer"
-              onClick={toggleNumberPopup}
-            >
-              +355686719295
-            </button>
-          </li>
+        {/* Mobile Number */}
+        <li className="flex justify-between items-center border-b border-gray-700 pb-4">
+          <p className="font-bold">Mobile number</p>
+          <button
+            className="text-blue-400 cursor-pointer"
+            onClick={toggleNumberPopup}
+          >
+            {user?.phoneNr}
+          </button>
+        </li>
 
-          {/* Name */}
-          <li className="flex justify-between items-center border-b border-gray-700 pb-4">
-            <p className="font-bold">Name</p>
-            <button
-              className="text-blue-400 cursor-pointer"
-              onClick={toggleNamePopup}
-            >
-              Boris Alibeja
-            </button>
-          </li>
+        {/* Name */}
+        <li className="flex justify-between items-center border-b border-gray-700 pb-4">
+          <p className="font-bold">Name</p>
+          <button
+            className="text-blue-400 cursor-pointer"
+            onClick={toggleNamePopup}
+          >
+            {user?.firstName} {user?.lastName}
+          </button>
+        </li>
 
-          {/* Delete Account */}
-          <li className="flex justify-between items-center border-b border-gray-700 pb-4">
-            <p className="font-bold">Delete account</p>
-            <button
-              className="text-red-500 cursor-pointer"
-              onClick={toggleDeletePopup}
-            >
-              Delete
-            </button>
-          </li>
+        {/* Delete Account */}
+        <li className="flex justify-between items-center border-b border-gray-700 pb-4">
+          <p className="font-bold">Delete account</p>
+          <button
+            className="text-red-500 cursor-pointer"
+            onClick={toggleDeletePopup}
+          >
+            Delete
+          </button>
+        </li>
 
-          {/* Send Receipts */}
-          <li className="flex justify-between items-center border-b border-gray-700 pb-4">
-            <p className="font-bold">Send receipts to email</p>
+        {/* Send Receipts */}
+        <li className="flex justify-between items-center border-b border-gray-700 pb-4">
+          <p className="font-bold">Send receipts to email</p>
+          <div
+            className={`relative w-12 h-6 rounded-full cursor-pointer transition-colors ${
+              isReceiptsEnabled ? "bg-green-500" : "bg-gray-500"
+            }`}
+            onClick={() => setIsReceiptsEnabled(!isReceiptsEnabled)}
+          >
             <div
-              className={`relative w-12 h-6 rounded-full cursor-pointer transition-colors ${
-                isReceiptsEnabled ? "bg-green-500" : "bg-gray-500"
+              className={`absolute w-6 h-6 bg-white rounded-full shadow transform transition-transform ${
+                isReceiptsEnabled ? "translate-x-6" : "translate-x-0"
               }`}
-              onClick={() => setIsReceiptsEnabled(!isReceiptsEnabled)}
-            >
-              <div
-                className={`absolute w-6 h-6 bg-white rounded-full shadow transform transition-transform ${
-                  isReceiptsEnabled ? "translate-x-6" : "translate-x-0"
-                }`}
-              ></div>
-            </div>
-          </li>
-        </ul>
-        {/* Email Popup */}
-        <EmailPopup
-          isOpen={isEmailPopupOpen}
-          onClose={toggleEmailPopup}
-          email={email}
-          onSave={handleSaveEmail}
-        />
-        <PhoneNrPopup
-          isOpen={isNumberPopupOpen}
-          onClose={toggleNumberPopup}
-          number={number}
-          onSave={handleSaveNumber}
-        />
-        <NamePopUp
-          isOpen={isNamePopupOpen}
-          onClose={toggleNamePopup}
-          firstName={firstName}
-          lastName={lastName}
-          onSave={handleSaveName}
-        />
-        <DeletePopup
-          isOpen={isDeletePopupOpen}
-          onClose={toggleDeletePopup}
-          onDelete={handleDeleteAccount}
-        />
-      </div>
-    </ProfileLayout>
+            ></div>
+          </div>
+        </li>
+      </ul>
+      {/* Email Popup */}
+      <EmailPopup
+        isOpen={isEmailPopupOpen}
+        onClose={toggleEmailPopup}
+        email={email}
+        onSave={handleSaveEmail}
+      />
+      <PhoneNrPopup
+        isOpen={isNumberPopupOpen}
+        onClose={toggleNumberPopup}
+        number={number}
+        onSave={handleSaveNumber}
+      />
+      <NamePopUp
+        isOpen={isNamePopupOpen}
+        onClose={toggleNamePopup}
+        firstName={firstName}
+        lastName={lastName}
+        onSave={handleSaveName}
+      />
+      <DeletePopup
+        isOpen={isDeletePopupOpen}
+        onClose={toggleDeletePopup}
+        onDelete={handleDeleteAccount}
+      />
+    </div>
   );
 };
 

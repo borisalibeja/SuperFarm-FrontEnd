@@ -68,7 +68,7 @@ const ProductCatalog: React.FC<ProductCatalogProps> = ({
               <div className="h-32 bg-gray-500 rounded-t-lg flex items-center justify-center">
                 <p className="text-white">Product Image</p>
               </div>
-              <div className="mt-4 pb-2 text-center">
+              <div className="mt-2 pb-2 text-center">
                 <p className="text-lg text-white font-semibold">
                   {product.productName}
                 </p>
