@@ -61,7 +61,9 @@ const AuthPopup: React.FC<Props> = ({ onClose, onSuccess, mode }) => {
 
   return (
     <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-gray-900 p-6 w-[400px] border rounded-2xl shadow-md z-50">
-      <h2 className="text-xl text-white flex justify-center items-center font-bold mb-4">{isLogin ? "Log In" : "Sign Up"}</h2>
+      <h2 className="text-xl text-white flex justify-center items-center font-bold mb-4">
+        {isLogin ? "Log In" : "Sign Up"}
+      </h2>
 
       <input
         type="text"

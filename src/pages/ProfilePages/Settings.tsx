@@ -4,6 +4,8 @@ import PhoneNrPopup from "../../components/settingsComponents/PhoneNrPopUp";
 import NamePopUp from "../../components/settingsComponents/NamePopUp";
 import DeletePopup from "../../components/settingsComponents/DeletePopUp";
 import { useUser } from "../../hooks/useUser";
+import axios from "axios";
+import { User } from "../../types/User";
 
 const Settings: React.FC = () => {
   const [isEmailPopupOpen, setIsEmailPopupOpen] = useState(false);
@@ -11,14 +13,12 @@ const Settings: React.FC = () => {
   const [isNamePopupOpen, setIsNamePopupOpen] = useState(false);
   const [isDeletePopupOpen, setIsDeletePopupOpen] = useState(false);
   const [isReceiptsEnabled, setIsReceiptsEnabled] = useState(true);
+  const [isDeleting, setIsDeleting] = useState(false);
+
+  const { user, setUser } = useUser();
 
   const toggleDeletePopup = () => {
     setIsDeletePopupOpen(!isDeletePopupOpen);
-  };
-
-  const handleDeleteAccount = (reason: string) => {
-    console.log("Account deleted for reason:", reason);
-    // Add account deletion logic here
   };
 
   const toggleNamePopup = () => {
@@ -31,23 +31,119 @@ const Settings: React.FC = () => {
   const toggleNumberPopup = () => {
     setIsNumberPopupOpen(!isNumberPopupOpen);
   };
-  const [email, setEmail] = useState("borissalibeja@gmail.com");
-  const [number, setNumber] = useState("+355686719295");
-  const [firstName, setFirstName] = useState("Boris");
-  const [lastName, setLastName] = useState("Alibeja");
 
-  const handleSaveEmail = (newEmail: string) => {
-    setEmail(newEmail);
-  };
-  const handleSaveNumber = (newNumber: string) => {
-    setNumber(newNumber);
+  const handleSaveEmail = async (newEmail: string) => {
+    if (!user || !user.userId) {
+      console.error("User or userId is undefined");
+      return;
+    }
+
+    try {
+      const token = localStorage.getItem("accessToken");
+      const response = await axios.patch(
+        `http://localhost:5035/UpdateMyUser`,
+        { email: newEmail }, // Request body
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      // Explicitly type the updated user object
+      const updatedUser: User = {
+        ...user,
+        email: response.data.email || newEmail, // Fallback to newEmail if response.data.email is undefined
+      };
+
+      setUser(updatedUser);
+    } catch (error) {
+      console.error("Error updating email:", error);
+    }
   };
 
-  const handleSaveName = (newFirsName: string, newLastName: string) => {
-    setFirstName(newFirsName);
-    setLastName(newLastName);
+  const handleSaveNumber = async (newNumber: string) => {
+    if (!user || !user.userId) {
+      console.error("User or userId is undefined");
+      return;
+    }
+    try {
+      const token = localStorage.getItem("accessToken");
+      const response = await axios.patch(
+        `http://localhost:5035/UpdateMyUser`,
+        { phoneNr: newNumber }, // Request body
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      const updatedUser: User = {
+        ...user,
+        phoneNr: response.data.phoneNr || newNumber,
+      };
+
+      setUser(updatedUser);
+    } catch (error) {
+      console.error("Error updating phone number:", error);
+    }
   };
-  const { user } = useUser();
+
+  const handleSaveName = async (newFirstName: string, newLastName: string) => {
+    if (!user || !user.userId) {
+      console.error("User or userId is undefined");
+      return;
+    }
+    try {
+      const token = localStorage.getItem("accessToken");
+      const response = await axios.patch(
+        `http://localhost:5035/UpdateMyUser`,
+        {
+          firstName: newFirstName,
+          lastName: newLastName,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      const updatedUser: User = {
+        ...user,
+        firstName: response.data.firstName || newFirstName,
+        lastName: response.data.lastName || newLastName,
+      };
+
+      setUser(updatedUser);
+    } catch (error) {
+      console.error("Error updating name:", error);
+    }
+  };
+
+  const handleDeleteMyAccount = async () => {
+    if (!user || !user.userId) {
+      console.error("User or userId is undefined");
+      return;
+    }
+    if (isDeleting) {
+      return; // Prevent duplicate requests
+    }
+    setIsDeleting(true);
+    try {
+      const token = localStorage.getItem("accessToken");
+      await axios.delete(`http://localhost:5035/delete-my-user`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      localStorage.removeItem("accessToken");
+      setUser(null);
+    } catch (error) {
+      console.error("Error deleting account:", error);
+    } finally {
+      setIsDeleting(false);
+    }
+  };
 
   if (!user) {
     return (
@@ -139,26 +235,26 @@ const Settings: React.FC = () => {
       <EmailPopup
         isOpen={isEmailPopupOpen}
         onClose={toggleEmailPopup}
-        email={email}
+        email={user?.email ?? ""}
         onSave={handleSaveEmail}
       />
       <PhoneNrPopup
         isOpen={isNumberPopupOpen}
         onClose={toggleNumberPopup}
-        number={number}
+        number={user?.phoneNr ?? ""}
         onSave={handleSaveNumber}
       />
       <NamePopUp
         isOpen={isNamePopupOpen}
         onClose={toggleNamePopup}
-        firstName={firstName}
-        lastName={lastName}
+        firstName={user?.firstName ?? ""}
+        lastName={user?.lastName ?? ""}
         onSave={handleSaveName}
       />
       <DeletePopup
         isOpen={isDeletePopupOpen}
         onClose={toggleDeletePopup}
-        onDelete={handleDeleteAccount}
+        onDelete={handleDeleteMyAccount}
       />
     </div>
   );

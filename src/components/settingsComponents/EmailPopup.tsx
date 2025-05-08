@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 interface EmailPopupProps {
   isOpen: boolean;
@@ -14,10 +14,29 @@ const EmailPopup: React.FC<EmailPopupProps> = ({
   onSave,
 }) => {
   const [newEmail, setNewEmail] = useState(email);
+  const [error, setError] = useState<string | null>(null);
+
+  // Reset the state and email input when the popup opens
+  useEffect(() => {
+    if (isOpen) {
+      setNewEmail(email);
+      setError(null);
+    }
+  }, [isOpen, email]);
 
   const handleSave = () => {
+    // Validate the email before saving
+    if (!validateEmail(newEmail)) {
+      setError("Please enter a valid email address.");
+      return;
+    }
     onSave(newEmail);
     onClose();
+  };
+
+  const validateEmail = (email: string): boolean => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
   };
 
   if (!isOpen) return null;
@@ -36,6 +55,7 @@ const EmailPopup: React.FC<EmailPopupProps> = ({
             className="w-full p-2 rounded bg-gray-800 text-white mb-4"
             placeholder="Enter your email"
           />
+          {error && <p className="text-red-500 text-sm">{error}</p>}
           <div className="flex flex-row justify-between items-center">
             <button
               className="bg-blue-500 text-white px-4 py-2 rounded cursor-pointer hover:bg-blue-600"

@@ -7,18 +7,9 @@ import AuthPopup from "../components/homeComponents/AuthPopup";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { UserContext } from "../contexts/UserContext";
+import { User } from "../types/User";
 
-interface User {
-  userId: string;
-  username: string;
-  firstName?: string;
-  lastName?: string;
-  age?: number;
-  email?: string;
-  phoneNr?: string;
-  address?: string;
-  role: string;
-}
+
 
 const ProfileLayout: React.FC = () => {
   const [authMode, setAuthMode] = useState<"login" | "signup" | null>(null);
