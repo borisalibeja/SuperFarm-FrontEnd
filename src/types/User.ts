@@ -5,7 +5,15 @@ export interface User {
   lastName: string;
   age?: number;
   email: string;
-  phoneNr?: string;
-  address?: string;
+  userPhoneNr?: string;
+  countryCode: string;
+  streetName: string;
+  city: string;
+  country: string;
+  county: string;
+  buildingNr: string;
+  floorNr: string;
+  postCode: string;
+  profileImgUrl: string;
   role: string;
 }

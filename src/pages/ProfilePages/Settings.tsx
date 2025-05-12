@@ -6,6 +6,7 @@ import DeletePopup from "../../components/settingsComponents/DeletePopUp";
 import { useUser } from "../../hooks/useUser";
 import axios from "axios";
 import { User } from "../../types/User";
+import { useNavigate } from "react-router-dom";
 
 const Settings: React.FC = () => {
   const [isEmailPopupOpen, setIsEmailPopupOpen] = useState(false);
@@ -14,7 +15,7 @@ const Settings: React.FC = () => {
   const [isDeletePopupOpen, setIsDeletePopupOpen] = useState(false);
   const [isReceiptsEnabled, setIsReceiptsEnabled] = useState(true);
   const [isDeleting, setIsDeleting] = useState(false);
-
+  const navigate = useNavigate();
   const { user, setUser } = useUser();
 
   const toggleDeletePopup = () => {
@@ -80,7 +81,7 @@ const Settings: React.FC = () => {
       );
       const updatedUser: User = {
         ...user,
-        phoneNr: response.data.phoneNr || newNumber,
+        userPhoneNr: response.data.phoneNr || newNumber,
       };
 
       setUser(updatedUser);
@@ -138,6 +139,7 @@ const Settings: React.FC = () => {
       });
       localStorage.removeItem("accessToken");
       setUser(null);
+      navigate("/");
     } catch (error) {
       console.error("Error deleting account:", error);
     } finally {
@@ -155,19 +157,15 @@ const Settings: React.FC = () => {
     <div className="bg-black min-h-screen text-white py-10 px-6">
       {/* Settings List */}
       <ul className="space-y-8 items-center">
-        {/* Country Selector */}
-        <li className="flex justify-between items-center border-b border-gray-700 pb-4 ">
-          <div>
-            <p className="font-bold ">Country</p>
-            <p className="text-sm text-gray-400">
-              The selected country determines the currency of your referral code
-            </p>
-          </div>
-          <select className="bg-gray-800 text-white p-2 rounded ">
-            <option>Albania</option>
-            <option>USA</option>
-            <option>Canada</option>
-          </select>
+        {/* Name */}
+        <li className="flex justify-between items-center border-b border-gray-700 pb-4">
+          <p className="font-bold">Name</p>
+          <button
+            className="text-blue-400 cursor-pointer"
+            onClick={toggleNamePopup}
+          >
+            {user?.firstName} {user?.lastName}
+          </button>
         </li>
 
         {/* Email */}
@@ -188,18 +186,7 @@ const Settings: React.FC = () => {
             className="text-blue-400 cursor-pointer"
             onClick={toggleNumberPopup}
           >
-            {user?.phoneNr}
-          </button>
-        </li>
-
-        {/* Name */}
-        <li className="flex justify-between items-center border-b border-gray-700 pb-4">
-          <p className="font-bold">Name</p>
-          <button
-            className="text-blue-400 cursor-pointer"
-            onClick={toggleNamePopup}
-          >
-            {user?.firstName} {user?.lastName}
+            {user?.userPhoneNr}
           </button>
         </li>
 
@@ -241,7 +228,7 @@ const Settings: React.FC = () => {
       <PhoneNrPopup
         isOpen={isNumberPopupOpen}
         onClose={toggleNumberPopup}
-        number={user?.phoneNr ?? ""}
+        number={user?.userPhoneNr ?? ""}
         onSave={handleSaveNumber}
       />
       <NamePopUp
