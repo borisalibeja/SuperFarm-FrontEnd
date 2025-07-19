@@ -1,8 +1,8 @@
 import React, { useState } from "react";
-import EmailPopup from "../../components/settingsComponents/EmailPopup";
-import PhoneNrPopup from "../../components/settingsComponents/PhoneNrPopUp";
-import NamePopUp from "../../components/settingsComponents/NamePopUp";
-import DeletePopup from "../../components/settingsComponents/DeletePopUp";
+import EmailPopup from "../../components/userSettingsComponents/EmailPopup";
+import PhoneNrPopup from "../../components/userSettingsComponents/PhoneNrPopUp";
+import NamePopUp from "../../components/userSettingsComponents/NamePopUp";
+import DeletePopup from "../../components/userSettingsComponents/DeletePopUp";
 import { useUser } from "../../hooks/useUser";
 import axios from "axios";
 import { User } from "../../types/User";
@@ -72,7 +72,7 @@ const Settings: React.FC = () => {
       const token = localStorage.getItem("accessToken");
       const response = await axios.patch(
         `http://localhost:5035/UpdateMyUser`,
-        { phoneNr: newNumber }, // Request body
+        { userPhoneNr: newNumber }, // Request body
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -186,7 +186,7 @@ const Settings: React.FC = () => {
             className="text-blue-400 cursor-pointer"
             onClick={toggleNumberPopup}
           >
-            {user?.userPhoneNr}
+            {user?.userPhoneNr || "123456789"}
           </button>
         </li>
 

@@ -1,11 +1,11 @@
-import { useUser } from "../../hooks/useUser";
+import { useFarm } from "../../hooks/useFarm";
 
-const PersonalInfo: React.FC = () => {
-  const { user } = useUser();
+const FarmInfo: React.FC = () => {
+  const { farm } = useFarm();
 
-  if (!user) {
+  if (!farm) {
     return (
-      <p className="text-white text-center">No user information available.</p>
+      <p className="text-white text-center">No Farm information available.</p>
     );
   }
   return (
@@ -27,18 +27,16 @@ const PersonalInfo: React.FC = () => {
         </div>
       </div>
       <div className="text-white flex flex-col justify-end p-8 pl-10 mb-15">
-        <h1 className="flex pb-5 font-bold text-xl">
-          {user?.firstName} {user?.lastName}
-        </h1>
+        <h1 className="flex pb-5 font-bold text-xl">{farm?.farmName}</h1>
         <p className="font-semibold">Email</p>
-        <p>{user?.email}</p>
+        <p>{farm?.farmEmail}</p>
       </div>
       <div className="text-white flex flex-col justify-end p-8 pl-10 mb-15">
         <p className=" font-semibold">Phone</p>
-        <p className="">{user?.phoneNr}</p>
+        <p className="">{farm?.farmPhoneNr}</p>
       </div>
     </div>
   );
 };
 
-export default PersonalInfo;
+export default FarmInfo;

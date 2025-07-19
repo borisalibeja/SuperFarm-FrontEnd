@@ -1,23 +1,16 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { Outlet } from "react-router-dom";
 import { FaShoppingCart } from "react-icons/fa";
 import { Link } from "react-router-dom";
 import ProfileDropdown from "../components/homeComponents/ProfileDropdown";
 import AuthPopup from "../components/homeComponents/AuthPopup";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
-import { UserContext } from "../contexts/UserContext";
-import { User } from "../types/User";
-
-
+import UserProvider from "../providers/UserProvider";
 
 const ProfileLayout: React.FC = () => {
   const [authMode, setAuthMode] = useState<"login" | "signup" | null>(null);
   const [, setIsAuthenticated] = useState(false);
   const navigate = useNavigate();
-  const [user, setUser] = useState<User | null>(null);
-  const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   const handleLogout = () => {
     localStorage.removeItem("accessToken");
@@ -26,50 +19,8 @@ const ProfileLayout: React.FC = () => {
     navigate("/products");
   };
 
-  useEffect(() => {
-    const fetchUserInfo = async () => {
-      setIsLoading(true);
-      setErrorMessage(null);
-
-      try {
-        const token = localStorage.getItem("accessToken");
-        const response = await axios.get<User>(
-          "http://localhost:5035/myUserInfo",
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
-        setUser(response.data);
-      } catch {
-        setErrorMessage("Failed to fetch user info. Please try again.");
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    fetchUserInfo();
-  }, []);
-
-  if (isLoading) {
-    return (
-      <div className="h-screen flex items-center justify-center text-white">
-        <p>Loading user info...</p>
-      </div>
-    );
-  }
-
-  if (errorMessage) {
-    return (
-      <div className="h-screen flex items-center justify-center text-red-500">
-        <p>{errorMessage}</p>
-      </div>
-    );
-  }
-
   return (
-    <UserContext.Provider value={{ user, setUser }}>
+    <UserProvider>
       <div className="bg-black">
         <div className="flex flex-col min-h-screen w-4/5 mx-auto bg-black">
           {/* Header */}
@@ -98,25 +49,25 @@ const ProfileLayout: React.FC = () => {
               <nav className="w-full bg-black border-b-[0.5px] border-gray-600 text-white">
                 <div className="flex text-xl justify-center gap-x-15 py-4 px-10">
                   <Link
-                    to="/profile"
+                    to="/user-profile/personal-info"
                     className="font-semibold  hover:underline"
                   >
                     Personal Info
                   </Link>
                   <Link
-                    to="/profile/addresses"
+                    to="/user-profile/address"
                     className="font-semibold  hover:underline"
                   >
                     Addresses
                   </Link>
                   <Link
-                    to="/profile/settings"
+                    to="/user-profile/settings"
                     className="font-semibold  hover:underline"
                   >
                     Settings
                   </Link>
                   <Link
-                    to="/profile/help"
+                    to="/user-profile/help"
                     className="font-semibold  hover:underline"
                   >
                     Help
@@ -145,7 +96,7 @@ const ProfileLayout: React.FC = () => {
           )}
         </div>
       </div>
-    </UserContext.Provider>
+    </UserProvider>
   );
 };
 

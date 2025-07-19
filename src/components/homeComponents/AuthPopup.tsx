@@ -1,7 +1,9 @@
 import React, { useState } from "react";
 import api from "../../api/axios";
-import { AxiosError } from "axios";
+import axios, { AxiosError } from "axios";
 import { UserLoginDto, TokenResponseDto } from "../../types/auth";
+import { User } from "../../types/User";
+import { useUser } from "../../hooks/useUser";
 
 interface Props {
   onClose: () => void;
@@ -15,6 +17,7 @@ const AuthPopup: React.FC<Props> = ({ onClose, onSuccess, mode }) => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [repeatPassword, setRepeatPassword] = useState("");
+  const { setUser } = useUser();
 
   const handleLogin = async () => {
     const payload: UserLoginDto = {
@@ -23,14 +26,32 @@ const AuthPopup: React.FC<Props> = ({ onClose, onSuccess, mode }) => {
     };
 
     try {
-      const response = await api.post<TokenResponseDto>("/Auth/login", payload);
-      console.log("AccessToken:", response.data.accessToken);
-      console.log("RefreshToken:", response.data.refreshToken);
+      const responseToken = await api.post<TokenResponseDto>(
+        "/Auth/login",
+        payload
+      );
+      console.log("AccessToken:", responseToken.data.accessToken);
+      console.log("RefreshToken:", responseToken.data.refreshToken);
       console.log("Login successful!");
       onSuccess();
       // Store the tokens as needed, e.g., in localStorage
-      localStorage.setItem("accessToken", response.data.accessToken);
-      localStorage.setItem("refreshToken", response.data.refreshToken);
+      localStorage.setItem("accessToken", responseToken.data.accessToken);
+      localStorage.setItem("refreshToken", responseToken.data.refreshToken);
+
+      const token = localStorage.getItem("accessToken");
+      const response = await axios.get<User>(
+        "http://localhost:5035/myUserInfo",
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      setUser(response.data);
+      localStorage.setItem("user", JSON.stringify(response.data));
+
+      console.log("User data fetched and saved:", response.data);
+      console.log("Auth Pop up:", response.data);
     } catch (error: unknown) {
       const err = error as AxiosError;
       console.error("Login error:", err.response?.data || err.message);

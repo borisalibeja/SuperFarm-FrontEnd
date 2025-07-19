@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import { FaUserCircle } from "react-icons/fa";
 import { Link } from "react-router-dom";
+import { useUser } from "../../hooks/useUser";
 
 interface Props {
   onLogoutClick: () => void;
@@ -9,13 +10,17 @@ interface Props {
 const ProfileDropdown: React.FC<Props> = ({ onLogoutClick }) => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
+  const { user } = useUser();
 
   const toggleDropdown = () => {
     setIsDropdownOpen((prevState) => !prevState);
   };
 
   const handleClickOutside = (event: MouseEvent) => {
-    if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+    if (
+      dropdownRef.current &&
+      !dropdownRef.current.contains(event.target as Node)
+    ) {
       setIsDropdownOpen(false);
     }
   };
@@ -42,7 +47,13 @@ const ProfileDropdown: React.FC<Props> = ({ onLogoutClick }) => {
         <div className="absolute right-0 mt-2 w-[250px] h-[200px]  font-semibold m-2 p-2 bg-gray-700 border rounded shadow-lg">
           <ul className="text-sm text-gray-700">
             <li className="px-4 py-2 text-white rounded-lg hover:bg-gray-500 cursor-pointer">
-              <Link to="/profile">Profile </Link>
+              {user?.role == "Customer" ? (
+                <Link to="/user-profile">Profile</Link>
+              ) : user?.role == "Farmer" ? (
+                <Link to="/farm-profile/personal-info">Farm Profile</Link>
+              ) : (
+                <span>No Profile Available</span> // Fallback if role is missing
+              )}
             </li>
             <li className="px-4 py-2 text-white rounded-lg hover:bg-gray-500 cursor-pointer">
               Start Selling

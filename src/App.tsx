@@ -1,13 +1,17 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import React, { useState } from "react";
-import Products from "./pages/MainPages/Products";
-import Farms from "./pages/MainPages/Farms";
-import Map from "./pages/MainPages/Map";
-import PersonalInfo from "./pages/ProfilePages/PersonalInfo";
-import Settings from "./pages/ProfilePages/Settings";
-import Addresses from "./pages/ProfilePages/Addresses";
-import ProfileLayout from "./layouts/ProfileLayouts";
-import Help from "./pages/ProfilePages/Help";
+import Products from "./pages/MainHomePages/Products";
+import Farms from "./pages/MainHomePages/Farms";
+import Map from "./pages/MainHomePages/Map";
+import PersonalInfo from "./pages/UserProfilePages/PersonalInfo";
+import Settings from "./pages/UserProfilePages/Settings";
+import Addresses from "./pages/UserProfilePages/Addresses";
+import ProfileLayout from "./layouts/UserProfileLayout";
+import Help from "./pages/UserProfilePages/Help";
+import FarmProfileLayout from "./layouts/FarmProfileLayout";
+import FarmInfo from "./pages/FarmProfilePages/FarmInfo";
+import FarmAddresses from "./pages/FarmProfilePages/FarmAddresses";
+import FarmSettings from "./pages/FarmProfilePages/FarmSettings";
 
 const App: React.FC = () => {
   const [searchQuery, setSearchQuery] = useState<string>("");
@@ -46,9 +50,20 @@ const App: React.FC = () => {
           }
         />
         {/* Profile Pages */}
-        <Route path="/profile" element={<ProfileLayout />}>
-          <Route index element={<PersonalInfo />} />
-          <Route path="addresses" element={<Addresses />} />
+        <Route path="/user-profile" element={<ProfileLayout />}>
+          <Route path="personal-info" element={<PersonalInfo />} />
+          <Route path="address" element={<Addresses />} />
+          <Route path="settings" element={<Settings />} />
+          <Route path="help" element={<Help />} />
+        </Route>
+
+        <Route path="/farm-profile" element={<FarmProfileLayout />}>
+          <Route path="farm-info" element={<FarmInfo />} />
+          <Route path="farm-address" element={<FarmAddresses />} />
+          <Route path="farm-settings" element={<FarmSettings />} />
+
+          <Route path="personal-info" element={<PersonalInfo />} />
+          <Route path="address" element={<Addresses />} />
           <Route path="settings" element={<Settings />} />
           <Route path="help" element={<Help />} />
         </Route>
